@@ -16,10 +16,10 @@ func main() {
 		db: dbConfig{
 			connectionString: env.GetString(
 				"GOOSE_DBSTRING",
-				"host=localhost user=postgres password=gallery dbname=gallery sslmode=disable"),
+				"host=localhost user=postgres password=postgres dbname=gallery sslmode=disable"),
 		},
 	}
-	
+
 	conn, err := pgx.Connect(ctx, config.db.connectionString)
 	if err != nil {
 		panic(err)
@@ -30,6 +30,7 @@ func main() {
 
 	api := application{
 		config: config,
+		db:     conn,
 	}
 
 	if error := api.run(api.mount()); error != nil {

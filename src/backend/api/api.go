@@ -6,7 +6,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/jackc/pgx/v5"
 	"github.com/jeevaprakashdr/image-gallery/internal/images"
+	repository "github.com/jeevaprakashdr/image-gallery/postgres/sqlc"
 )
 
 // mount
@@ -19,7 +21,7 @@ func (app *application) mount() http.Handler {
 		w.Write([]byte("all good for now!!"))
 	})
 
-	imageService := images.NewService()
+	imageService := images.NewService(repository.New(app.db))
 	imageHandler := images.NewHandler(imageService)
 	r.Get("/images", imageHandler.ListImages)
 
@@ -29,7 +31,7 @@ func (app *application) mount() http.Handler {
 type application struct {
 	config config
 	// logger
-	// db driver
+	db *pgx.Conn
 }
 
 // Run

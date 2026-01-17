@@ -18,7 +18,7 @@ func NewHandler(service Service) *handler {
 }
 
 func (h *handler) ListImages(w http.ResponseWriter, r *http.Request) {
-	err := h.service.ListImages(r.Context())
+	images, err := h.service.ListImages(r.Context())
 
 	if err != nil {
 		log.Println(err)
@@ -26,7 +26,5 @@ func (h *handler) ListImages(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	images := []string{"image1", "image2"}
-
-	json.Write(w, http.StatusAccepted, images)
+	json.Write(w, http.StatusOK, images)
 }
