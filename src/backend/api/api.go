@@ -7,7 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/jackc/pgx/v5"
-	"github.com/jeevaprakashdr/image-gallery/internal/images"
+	"github.com/jeevaprakashdr/image-gallery/services/images"
 	repository "github.com/jeevaprakashdr/image-gallery/postgres/sqlc"
 )
 

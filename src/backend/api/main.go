@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/jeevaprakashdr/image-gallery/internal/env"
+	"github.com/jeevaprakashdr/image-gallery/services/env"
 )
 
 func main() {
