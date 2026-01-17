@@ -21,10 +21,10 @@ func (app *application) mount() http.Handler {
 		w.Write([]byte("all good for now!!"))
 	})
 
-	imageService := images.NewService(repository.New(app.db))
-	imageHandler := images.NewHandler(imageService)
-
 	r.Route("/images", func(r chi.Router) {
+		imageService := images.NewService(repository.New(app.db))
+		imageHandler := images.NewHandler(imageService)
+
 		r.Get("/", imageHandler.ListImages)
 		r.Get("/search", func(w http.ResponseWriter, r *http.Request) {
 			tag := r.URL.Query().Get("tag")
@@ -37,7 +37,6 @@ func (app *application) mount() http.Handler {
 
 type application struct {
 	config config
-	// logger
 	db *pgx.Conn
 }
 
