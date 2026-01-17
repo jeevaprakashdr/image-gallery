@@ -19,7 +19,8 @@ func (app *application) mount() http.Handler {
 		w.Write([]byte("all good for now!!"))
 	})
 
-	imageHandler := images.NewHandler(nil)
+	imageService := images.NewService()
+	imageHandler := images.NewHandler(imageService)
 	r.Get("/images", imageHandler.ListImages)
 
 	return r
