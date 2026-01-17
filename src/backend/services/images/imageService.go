@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	repository "github.com/jeevaprakashdr/image-gallery/postgres/sqlc"
+	repository "github.com/jeevaprakashdr/image-gallery/infrastructure/postgres/sqlc"
 )
 
 type Service interface {

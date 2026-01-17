@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/jackc/pgx/v5"
 	"github.com/jeevaprakashdr/image-gallery/services/images"
-	repository "github.com/jeevaprakashdr/image-gallery/postgres/sqlc"
+	repository "github.com/jeevaprakashdr/image-gallery/infrastructure/postgres/sqlc"
 )
 
 // mount
