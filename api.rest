@@ -1,0 +1,9 @@
+### Health Check
+
+GET http://localhost:8080/health
+Accept: application/json
+
+### Get Images
+
+GET http://localhost:8080/images
+Accept: application/json
