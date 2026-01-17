@@ -7,3 +7,9 @@ Accept: application/json
 
 GET http://localhost:8080/images
 Accept: application/json
+
+
+### Get Image
+
+GET http://localhost:8080/images/search?tag=%231
+Accept: application/json

@@ -23,7 +23,14 @@ func (app *application) mount() http.Handler {
 
 	imageService := images.NewService(repository.New(app.db))
 	imageHandler := images.NewHandler(imageService)
-	r.Get("/images", imageHandler.ListImages)
+
+	r.Route("/images", func(r chi.Router) {
+		r.Get("/", imageHandler.ListImages)
+		r.Get("/search", func(w http.ResponseWriter, r *http.Request) {
+			tag := r.URL.Query().Get("tag")
+			imageHandler.SearchImages(tag, w, r)
+		})
+	})
 
 	return r
 }

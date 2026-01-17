@@ -28,3 +28,15 @@ func (h *handler) ListImages(w http.ResponseWriter, r *http.Request) {
 
 	json.Write(w, http.StatusOK, images)
 }
+
+func (h *handler) SearchImages(tag string, w http.ResponseWriter, r *http.Request) {
+	images, err := h.service.SearchImages(tag, r.Context())
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	json.Write(w, http.StatusOK, images)
+}
