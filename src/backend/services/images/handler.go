@@ -1,8 +1,6 @@
 package images
 
 import (
-	"bytes"
-	"context"
 	"fmt"
 	"io"
 	"log"
@@ -10,10 +8,9 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
+	minioClient "github.com/jeevaprakashdr/image-gallery/infrastructure/minio"
 	json "github.com/jeevaprakashdr/image-gallery/services"
 	"github.com/jeevaprakashdr/image-gallery/services/imageProcessors"
-	"github.com/minio/minio-go/v7"
-	"github.com/minio/minio-go/v7/pkg/credentials"
 )
 
 type handler struct {
@@ -73,10 +70,13 @@ func (h *handler) SaveImage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id := uuid.New()
-	if err := uploadToObjectStorage(resizedImgBytes, "scaled-"+id.String(), w); err != nil {
+	client := minioClient.NewMinioClient()
+	key, err := client.Upload(resizedImgBytes, "scaled-"+id.String())
+	if err != nil {
 		http.Error(w, "Error uploading to save image to gallery", http.StatusInternalServerError)
 		return
 	}
+	fmt.Fprintf(w, "Successfully uploaded with key %s\n", key)
 
 	if err := h.service.SaveImageDetails(title, tags, id, r.Context()); err != nil {
 		http.Error(w, "Error uploading to save image to gallery", http.StatusInternalServerError)
@@ -101,29 +101,4 @@ func (h *handler) SearchImages(tag string, w http.ResponseWriter, r *http.Reques
 func isValidFileType(file []byte) bool {
 	fileType := http.DetectContentType(file)
 	return strings.HasPrefix(fileType, "image/")
-}
-
-func uploadToObjectStorage(fileBytes []byte, filename string, w http.ResponseWriter) error {
-	endpoint := "localhost:9000"
-	accessKeyID := "minioadmin"
-	secretAccessKey := "minioadmin"
-	bucketName := "images"
-
-	minioClient, err := minio.New(endpoint, &minio.Options{
-		Creds:  credentials.NewStaticV4(accessKeyID, secretAccessKey, ""),
-		Secure: false,
-	})
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	contentType := "image/png"
-
-	info, err := minioClient.PutObject(context.Background(), bucketName, filename+".png", bytes.NewReader(fileBytes), int64(len(fileBytes)), minio.PutObjectOptions{ContentType: contentType})
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	fmt.Fprintf(w, "Successfully uploaded %s of size %d\n", filename+".png", info.Size)
-	return nil
 }
