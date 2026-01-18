@@ -38,8 +38,6 @@ func (h *handler) ListImages(w http.ResponseWriter, r *http.Request) {
 func (h *handler) SaveImage(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(10 << 20)
 
-	title := r.FormValue("title")
-	tags := r.FormValue("tags")
 	file, _, err := r.FormFile("payload")
 
 	if err != nil {
@@ -47,9 +45,6 @@ func (h *handler) SaveImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
-
-	fmt.Fprintf(w, "Title: %v\n", title)
-	fmt.Fprintf(w, "Tags: %v\n", tags)
 
 	fileBytes, err := io.ReadAll(file)
 	if err != nil {
@@ -78,6 +73,8 @@ func (h *handler) SaveImage(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Fprintf(w, "Successfully uploaded with key %s\n", key)
 
+	title := r.FormValue("title")
+	tags := r.FormValue("tags")
 	if err := h.service.SaveImageDetails(title, tags, id, r.Context()); err != nil {
 		http.Error(w, "Error uploading to save image to gallery", http.StatusInternalServerError)
 		return
