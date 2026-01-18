@@ -1,5 +1,6 @@
 import fetchImages from "@/lib/fetchImages"
 import { Image } from "@/models/Image"
+import ImgContainer from "./ImgContainer";
 
 export default async function Gallery() {
 
@@ -10,8 +11,9 @@ export default async function Gallery() {
     
     return (
         <section className="px-2 my-3 grid grid-cols-3 gap-5">
-            {images.map(x => (
-                <div key={x.id} className="h-64 bg-gray-200 rounded-xl">{x.title}</div>
+            <div className="h-64 bg-gray-200 flex items-center justify-center text-8xl">+</div>
+            {images.map((x, i) => (
+                <ImgContainer key={i} photo={x}/>
             ))}
         </section>
     )
