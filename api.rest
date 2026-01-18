@@ -8,6 +8,24 @@ Accept: application/json
 GET http://localhost:8080/images
 Accept: application/json
 
+### Upload Image
+POST http://localhost:8080/images/upload
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="title"
+
+TestTitle
+--boundary
+Content-Disposition: form-data; name="tags"
+
+tag1, tag2
+--boundary
+Content-Disposition: form-data; name="payload"; filename="test.png"
+Content-Type: application/octet-stream
+
+< /Users/jeeva/Desktop/8eb31ff1-c8df-4b89-8338-dc1c683988a7.png
+--boundary--
 
 ### Get Image
 

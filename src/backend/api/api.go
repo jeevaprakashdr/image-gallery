@@ -7,11 +7,11 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/jackc/pgx/v5"
-	"github.com/jeevaprakashdr/image-gallery/services/images"
 	repository "github.com/jeevaprakashdr/image-gallery/infrastructure/postgres/sqlc"
+	"github.com/jeevaprakashdr/image-gallery/services/images"
 )
 
-// mount
+// Mount
 func (app *application) mount() http.Handler {
 	r := chi.NewRouter()
 
@@ -26,6 +26,7 @@ func (app *application) mount() http.Handler {
 		imageHandler := images.NewHandler(imageService)
 
 		r.Get("/", imageHandler.ListImages)
+		r.Post("/upload", imageHandler.SaveImage)
 		r.Get("/search", func(w http.ResponseWriter, r *http.Request) {
 			tag := r.URL.Query().Get("tag")
 			imageHandler.SearchImages(tag, w, r)
