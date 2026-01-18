@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
 import "./globals.css";
-
+import type { Metadata } from "next";
+import Navbar from "./components/Navbar";
 
 export const metadata: Metadata = {
   title: "Image Gallery",
@@ -15,6 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <Navbar/>
         <main className="m-10 max-w-4xl mx-auto">
           {children}
         </main>

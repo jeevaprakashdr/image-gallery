@@ -1,10 +1,14 @@
 import { Image } from "@/models/Image";
 
-export default async function fetchImages()
+export default async function fetchImages(topic: string | undefined)
 : Promise<Image[] | undefined> {
 
     try {
-        const res = await fetch("http://localhost:8080/images")
+        const url = !topic
+            ? "http://localhost:8080/images"
+            : `http://localhost:8080/images/search?tag=${topic}`;
+        
+        const res = await fetch(url)
 
         if(!res.ok) throw new Error("Failed to fetch image data")
         
