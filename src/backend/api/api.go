@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"github.com/jackc/pgx/v5"
 	repository "github.com/jeevaprakashdr/image-gallery/infrastructure/postgres/sqlc"
 	"github.com/jeevaprakashdr/image-gallery/services/images"
@@ -14,6 +15,13 @@ import (
 // Mount
 func (app *application) mount() http.Handler {
 	r := chi.NewRouter()
+
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
+		AllowCredentials: false,
+	}))
 
 	r.Use(middleware.Logger)
 
@@ -38,7 +46,7 @@ func (app *application) mount() http.Handler {
 
 type application struct {
 	config config
-	db *pgx.Conn
+	db     *pgx.Conn
 }
 
 // Run
