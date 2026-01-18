@@ -9,7 +9,7 @@ export default async function Gallery() {
         return <h2 className="m4 text-2xl font-bold">No Images found</h2>
     
     return (
-        <section className="px-2 my-3 grid gap-2 grid-cols-3">
+        <section className="px-2 my-3 grid grid-cols-3 gap-5">
             {images.map(x => (
                 <div key={x.id} className="h-64 bg-gray-200 rounded-xl">{x.title}</div>
             ))}
