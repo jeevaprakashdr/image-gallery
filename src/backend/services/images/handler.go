@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/disintegration/imaging"
 	"github.com/google/uuid"
 	json "github.com/jeevaprakashdr/image-gallery/services"
 	"github.com/minio/minio-go/v7"
@@ -64,8 +65,24 @@ func (h *handler) SaveImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	img, err := imaging.Decode(bytes.NewReader(fileBytes))
+	if err != nil {
+		http.Error(w, "Failed to decode image", http.StatusInternalServerError)
+		return
+	}
+
+	resizedImg := imaging.Resize(img, 150, 150, imaging.Lanczos)
+
+	var buf bytes.Buffer
+	err = imaging.Encode(&buf, resizedImg, imaging.PNG)
+	if err != nil {
+		http.Error(w, "Failed to encode resized image", http.StatusInternalServerError)
+		return
+	}
+	resizedImgBytes := buf.Bytes()
+
 	id := uuid.New()
-	if err := uploadToObjectStorage(fileBytes, id.String(), w); err != nil {
+	if err := uploadToObjectStorage(resizedImgBytes, "scaled-"+id.String(), w); err != nil {
 		http.Error(w, "Error uploading to save image to gallery", http.StatusInternalServerError)
 		return
 	}
