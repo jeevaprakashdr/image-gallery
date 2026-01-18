@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"log"
+	"os"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
@@ -21,10 +22,10 @@ func NewMinioClient() MinioClient {
 }
 
 func (c *minioClient) Upload(fileBytes []byte, filename string) (string, error) {
-	endpoint := "localhost:9000"
-	accessKeyID := "minioadmin"
-	secretAccessKey := "minioadmin"
-	bucketName := "images"
+	endpoint := os.Getenv("MINIO_URL")
+	accessKeyID := os.Getenv("MINIO_ACCESS_KEY_ID")
+	secretAccessKey := os.Getenv("MINIO_ACCESS_KEY_SECRETE")
+	bucketName := os.Getenv("MINIO_GALLERY_BUCKET")
 
 	minioClient, err := minio.New(endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(accessKeyID, secretAccessKey, ""),
