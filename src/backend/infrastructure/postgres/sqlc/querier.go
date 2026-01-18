@@ -13,6 +13,7 @@ import (
 type Querier interface {
 	GetImage(ctx context.Context, title pgtype.Text) (Image, error)
 	ListImages(ctx context.Context) ([]Image, error)
+	SaveImage(ctx context.Context, arg SaveImageParams) (Image, error)
 }
 
 var _ Querier = (*Queries)(nil)

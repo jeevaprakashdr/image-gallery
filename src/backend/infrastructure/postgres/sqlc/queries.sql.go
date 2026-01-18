@@ -46,3 +46,22 @@ func (q *Queries) ListImages(ctx context.Context) ([]Image, error) {
 	}
 	return items, nil
 }
+
+const saveImage = `-- name: SaveImage :one
+INSERT INTO images (id , title, tags)
+VALUES ($1, $2, $3)
+RETURNING id, title, tags
+`
+
+type SaveImageParams struct {
+	ID    pgtype.UUID `json:"id"`
+	Title pgtype.Text `json:"title"`
+	Tags  pgtype.Text `json:"tags"`
+}
+
+func (q *Queries) SaveImage(ctx context.Context, arg SaveImageParams) (Image, error) {
+	row := q.db.QueryRow(ctx, saveImage, arg.ID, arg.Title, arg.Tags)
+	var i Image
+	err := row.Scan(&i.ID, &i.Title, &i.Tags)
+	return i, err
+}

@@ -40,9 +40,9 @@ func (h *handler) ListImages(w http.ResponseWriter, r *http.Request) {
 func (h *handler) SaveImage(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(10 << 20)
 
-	file, handler, err := r.FormFile("payload")
 	title := r.FormValue("title")
 	tags := r.FormValue("tags")
+	file, _, err := r.FormFile("payload")
 
 	if err != nil {
 		http.Error(w, "Error retrieving the file", http.StatusBadRequest)
@@ -50,9 +50,6 @@ func (h *handler) SaveImage(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	fmt.Fprintf(w, "Uploaded File: %s\n", handler.Filename)
-	fmt.Fprintf(w, "File Size: %d\n", handler.Size)
-	fmt.Fprintf(w, "MIME Header: %v\n", handler.Header)
 	fmt.Fprintf(w, "Title: %v\n", title)
 	fmt.Fprintf(w, "Tags: %v\n", tags)
 
@@ -67,9 +64,14 @@ func (h *handler) SaveImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id := uuid.New().String()
-	if err := uploadToObjectStorage(fileBytes, id, w); err != nil {
-		http.Error(w, "Error uploading to Object Storage", http.StatusInternalServerError)
+	id := uuid.New()
+	if err := uploadToObjectStorage(fileBytes, id.String(), w); err != nil {
+		http.Error(w, "Error uploading to save image to gallery", http.StatusInternalServerError)
+		return
+	}
+
+	if err := h.service.SaveImageDetails(title, tags, id, r.Context()); err != nil {
+		http.Error(w, "Error uploading to save image to gallery", http.StatusInternalServerError)
 		return
 	}
 
