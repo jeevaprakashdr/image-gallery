@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	"github.com/gorilla/websocket"
 	"github.com/jackc/pgx/v5"
 	repository "github.com/jeevaprakashdr/image-gallery/infrastructure/postgres/sqlc"
 	"github.com/jeevaprakashdr/image-gallery/services/images"
@@ -31,7 +32,7 @@ func (app *application) mount() http.Handler {
 
 	r.Route("/images", func(r chi.Router) {
 		imageService := images.NewService(repository.New(app.db))
-		imageHandler := images.NewHandler(imageService)
+		imageHandler := images.NewHandler(imageService, app.wsClientConnection)
 
 		r.Get("/", imageHandler.ListImages)
 		r.Post("/upload", imageHandler.SaveImage)
@@ -45,8 +46,9 @@ func (app *application) mount() http.Handler {
 }
 
 type application struct {
-	config config
-	db     *pgx.Conn
+	config             config
+	db                 *pgx.Conn
+	wsClientConnection *websocket.Conn
 }
 
 // Run

@@ -8,18 +8,21 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
+	"github.com/gorilla/websocket"
 	minioClient "github.com/jeevaprakashdr/image-gallery/infrastructure/minio"
 	json "github.com/jeevaprakashdr/image-gallery/services"
 	"github.com/jeevaprakashdr/image-gallery/services/imageProcessors"
 )
 
 type handler struct {
-	service Service
+	service            Service
+	wsClientConnection *websocket.Conn
 }
 
-func NewHandler(service Service) *handler {
+func NewHandler(service Service, wsClientConnection *websocket.Conn) *handler {
 	return &handler{
-		service: service,
+		service:            service,
+		wsClientConnection: wsClientConnection,
 	}
 }
 
@@ -77,6 +80,12 @@ func (h *handler) SaveImage(w http.ResponseWriter, r *http.Request) {
 	tags := r.FormValue("tags")
 	if err := h.service.SaveImageDetails(title, tags, id, r.Context()); err != nil {
 		http.Error(w, "Error uploading to save image to gallery", http.StatusInternalServerError)
+		return
+	}
+
+	wsErr := h.wsClientConnection.WriteMessage(websocket.TextMessage, []byte("hi")) // todo meed to send binary message
+	if wsErr != nil {
+		http.Error(w, "WebSocket write error: "+wsErr.Error(), http.StatusInternalServerError)
 		return
 	}
 
