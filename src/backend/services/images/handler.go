@@ -83,7 +83,7 @@ func (h *handler) SaveImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	wsErr := h.wsClientConnection.WriteMessage(websocket.TextMessage, []byte("hi")) // todo meed to send binary message
+	wsErr := h.wsClientConnection.WriteMessage(websocket.TextMessage, []byte(id.String()))
 	if wsErr != nil {
 		http.Error(w, "WebSocket write error: "+wsErr.Error(), http.StatusInternalServerError)
 		return

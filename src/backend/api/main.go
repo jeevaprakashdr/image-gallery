@@ -35,7 +35,7 @@ func main() {
 
 	log.Printf("connected to database %s", config.db.connectionString)
 
-	wsConn, _, err := websocket.DefaultDialer.Dial("ws://localhost:5000/ws", nil)
+	wsConn, _, err := websocket.DefaultDialer.Dial("ws://localhost:8081/ws", nil)
 	if err != nil {
 		log.Fatal("WebSocket dial error:", err)
 	}
