@@ -12,6 +12,7 @@ Please follow the bellow steps to run the application.
 * In `/src/backend` run `go run ./api/*.go` to start the api.
 * Run `feed.sh` to initailise Gallery with images. 
 * In `/src/frontend/web-app` run `npm run dev` to start the web application.
+* 'api.rest' is defined withthe API endpoints. Need to have https://marketplace.visualstudio.com/items?itemName=humao.rest-client
 
 ********NOTE: `Websocket` server should be initialised before `web-app` instantiated 
 ## Design decisions
