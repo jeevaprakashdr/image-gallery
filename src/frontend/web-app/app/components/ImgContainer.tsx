@@ -8,7 +8,7 @@ export default function ImgContainer({photo}: Props) {
         <div className="">
             <img
                 className="rounded-xl"
-                src={"http://localhost:9000/images/scaled-"+ photo.id + ".png"}
+                src={`http://localhost:9000/images/scaled-${photo.id}.png`}
                 alt={photo.title}
                 width={280}
                 height={250}>

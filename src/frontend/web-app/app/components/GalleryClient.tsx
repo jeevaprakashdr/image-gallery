@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import fetchImages from "@/lib/fetchImages";
 import { Image } from "@/models/Image";
+import fetchImages from "@/lib/fetchImages";
 import ImgContainer from "./ImgContainer";
 
 type Props = {
