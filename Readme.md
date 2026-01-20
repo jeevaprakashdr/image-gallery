@@ -1,18 +1,18 @@
 # Image Gallery
 
-
-
 ## Setup
 
+ File `api.rest` is defined with API endpoints and to effecticely utilise need vscode extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao).
+ 
 Please follow the bellow steps to run the application. 
 
+* Run `source ./init_env.sh` to sent `env` variables. Please run in every terminal lof API, Web and websocket. 
 * In `/src` run `docker compose up -d --no-recreate` to setup postgreSQL and Minio.
 * In `/src` run `goose up` to run database migrations.
 * In `/src/websocket` run `go run ./*.go` to start websocket server.
 * In `/src/backend` run `go run ./api/*.go` to start the api.
 * Run `feed.sh` to initailise Gallery with images. 
 * In `/src/frontend/web-app` run `npm run dev` to start the web application.
-* `api.rest` is defined withthe API endpoints. Need to have https://marketplace.visualstudio.com/items?itemName=humao.rest-client
 
 ********NOTE: `Websocket` server should be initialised before `web-app` instantiated 
 ## Design decisions
@@ -44,6 +44,7 @@ Following are some of the components considered for the image gallery applicatio
 In my opinion many things can be improved and foollowing are few identified . 
 * Unit/integration tests
 * Effeciant use of `.env` file. This hindered in creating docker images.
+    - <span style="color: red;">WIP to remove dependency.</span>
 * Implementing Bonus section.
 
 
