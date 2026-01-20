@@ -1,5 +1,7 @@
 #!/bin/bash
 
+brew install goose
+
 source ./init_env.sh
 
 docker build --tag img-ws ./src/websocket
