@@ -1,4 +1,9 @@
 services:
+  websocket-server:
+    image: img-ws
+    container_name: img-ws
+    ports:
+      - "8081:8081"
   postgres:
     image: postgres:16-alpine
     container_name: image-gallery-db
@@ -38,7 +43,6 @@ services:
       /usr/bin/mc anonymous set download local/$$GALLERY_SCALED_BUCKET_NAME;
       exit 0;
       "
-
 volumes:
   postgres-data:
   minio_data:
