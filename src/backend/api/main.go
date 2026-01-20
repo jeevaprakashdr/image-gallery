@@ -8,15 +8,10 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/jackc/pgx/v5"
 	"github.com/jeevaprakashdr/image-gallery/services/env"
-	"github.com/joho/godotenv"
 )
 
 func main() {
 	ctx := context.Background()
-	err := godotenv.Load("../.env")
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
-	}
 
 	config := config{
 		address: ":8080",
