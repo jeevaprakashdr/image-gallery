@@ -6,15 +6,10 @@
  
 Please follow the bellow steps to run the application. 
 
-* Run `source ./init_env.sh` to sent `env` variables. Please run in every terminal lof API, Web and websocket. 
-* In `/src` run `docker compose up -d --no-recreate` to setup postgreSQL and Minio.
-* In `/src` run `goose up` to run database migrations.
-* In `/src/websocket` run `go run ./*.go` to start websocket server.
+* Run `setup.sh` in `image-gallery` directory 
 * In `/src/backend` run `go run ./api/*.go` to start the api.
-* Run `feed.sh` to initailise Gallery with images. 
 * In `/src/frontend/web-app` run `npm run dev` to start the web application.
 
-********NOTE: `Websocket` server should be initialised before `web-app` instantiated 
 ## Design decisions
 
 ### Aim
